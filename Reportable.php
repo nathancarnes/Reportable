@@ -8,6 +8,8 @@ class Reportable {
   public $reportsPath = 'reports';
   public $fileName;
 
+  public $currentRow = 'even';
+
   function __construct($ID = null) {
     $this->tableID = $ID ? $ID : 'report-' . time();
   }
@@ -20,10 +22,22 @@ class Reportable {
     $this->rows[] = func_get_args();
   }
 
+  /*
+   * HTML Handling
+   */
+
   public function showTable() {
-    print_r($this->headers);
-    print_r($this->rows);
+    require_once('Reportable.template.php');
   }
+
+  public function rowClass() {
+    $this->currentRow = $this->currentRow == 'even' ? 'odd' : 'even';
+    return $this->currentRow;
+  }
+
+  /*
+   * CSV Handling
+   */
 
   public function setFileName() {
     $this->fileName = $this->fileName ? $this->fileName : $this->tableID . '.csv';
